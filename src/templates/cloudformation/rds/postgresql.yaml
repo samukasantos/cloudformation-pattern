@@ -21,7 +21,7 @@ Parameters:
     MinValue: '0'
     Type: Number
   DBEngineVersion:
-    Default: 8.0.28
+    Default: 11.12
     Description: The database engine version
     Type: String
   DBInputCIDR:
@@ -31,9 +31,9 @@ Parameters:
     Type: String
   DBInstanceClass:
     AllowedValues:
-    - db.t3.small
+    - db.m5.large
     ConstraintDescription: must select a valid database instance type.
-    Default: db.t3.small
+    Default: db.m5.large
     Description: The database instance type
     Type: String
   DBInstanceIdentifier:
@@ -50,11 +50,11 @@ Parameters:
     MinLength: '4'
     Type: String
   DBPortNumber:
-    ConstraintDescription: 3306 is the only possible value
-    Default: '3306'
+    ConstraintDescription: 5432 is the only possible value
+    Default: '5432'
     Description: The port number on which the database accepts connections.
-    MaxValue: '3306'
-    MinValue: '3306'
+    MaxValue: '5432'
+    MinValue: '5432'
     Type: Number
   DbSubnetA:
     Type: AWS::EC2::Subnet::Id
@@ -62,6 +62,7 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
   DBParameterGroupFamily:
     Type: String
+    Default: postgres11
   DBVPC:
     ConstraintDescription: must be an existing VPC
     Description: Select the VPC where the RDS database will be created
@@ -174,7 +175,7 @@ Resources:
         Ref: DBParameterGroup
       DBSubnetGroupName:
         Ref: DBSubnetGroup
-      Engine: MySQL
+      Engine: postgres
       EngineVersion:
        Ref: DBEngineVersion
       MasterUsername: !Sub "{{resolve:secretsmanager:${DBSecrets}::username}}"
