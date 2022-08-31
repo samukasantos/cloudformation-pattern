@@ -13,7 +13,7 @@ RUN go install github.com/GeertJohan/go.rice/rice@latest
 
 WORKDIR $GOPATH/src/github.com/servian/TechChallengeApp
 
-COPY . .
+COPY src/app .
 
 RUN go mod tidy
 
