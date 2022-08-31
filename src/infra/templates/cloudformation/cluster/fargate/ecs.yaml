@@ -248,6 +248,6 @@ Outputs:
       Name: !Sub "${AWS::StackName}-service-name"
   TargetGroup:
     Description: Target Group
-    Value: TargetGroup.TargetGroupFullName
+    Value: !GetAtt TargetGroup.TargetGroupFullName
     Export:
       Name: !Sub "${AWS::StackName}-target-group"
