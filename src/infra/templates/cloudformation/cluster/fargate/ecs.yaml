@@ -52,11 +52,11 @@ Parameters:
   PrivateSubnetA:
     Description: Private subnet A.
     Type: AWS::EC2::Subnet::Id
-    Default: subnet-0a9f792f28118ba7a
+    Default: subnet-09d046d68ea4a5830
   PrivateSubnetB:
     Description: Private subnet B.
     Type: AWS::EC2::Subnet::Id
-    Default: subnet-0eddef6905bc935bb
+    Default: subnet-0d4b995fa52527f88
   S3Arn:
     Description: S3 bucket environment variables.
     Type: String
