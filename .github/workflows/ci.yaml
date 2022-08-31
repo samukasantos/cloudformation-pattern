@@ -8,7 +8,6 @@ env:
   stackname:        'servian-techchallengeapp-fargate-api'
   albstackname:     'servian-alb'
   clusterstackname: 'servian-fargate-cluster'
-  dbsecretname:     'topplar-database'
   dbstackname:      'servian-rds'
   hostname:         'techchallengeapp'
   healthcheckpath:  '/healthcheck'
@@ -56,7 +55,7 @@ jobs:
             AlbStackName=${{ env.albstackname }},
             ClusterStackName=${{ env.clusterstackname }},
             DbStackName=${{ env.dbstackname }},
-            Hostname=${{ env.hostname }},
             DockerImage=${{ steps.build-image.outputs.image }},
             HealthCheckPath=${{ env.healthcheckpath }},
-            S3Arn=${{ env.s3arn }},
+            Hostname=${{ env.hostname }},
+            S3Arn=${{ env.s3arn }}
