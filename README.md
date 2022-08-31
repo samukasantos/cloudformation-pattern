@@ -34,6 +34,7 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 | /src/templates/cloudformation/cluster/fargate/cluster.yaml | ecs cluster | This template deploys an ECS cluster. |
 | /src/templates/cloudformation/cluster/fargate/ecs.yaml | ecs service | This template deploys an ECS service with taskdefinition to the private subnets, security group and it is responsible to inject the database credentials into Secrets Manager which will be available in the task via environment variables. |
 | /src/templates/cloudformation/ecr/ecr.yaml | ecr | This template deploys an ECR repository for the images related to the current project. |
+| /src/templates/cloudformation/autoscaling/autoscaler.yaml| Auto scaling | This template deploys Auto Scaling with policies and alarm. |
 | /src/templates/cloudformation/rds/postgresql.yaml | rds | This template deploys a Postgres database to multiple AZs with the securit group associated. |
 | /src/templates/cloudformation/roles/github-action-role.yaml| GitHub role | This template deploys a role used by this repository to deploy in the AWS provider, the account used was created using AWS Organization with AWS SSO and this is the OIDC Github provider. |
 | /src/templates/cloudformation/roles/fargate-cluster-app-task-role.yaml| Farget task role | This template deploys an additional role for the Fargate to make possible the tasks communicate with AWS Apis. |
