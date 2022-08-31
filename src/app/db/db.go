@@ -58,15 +58,27 @@ func RebuildDb(cfg Config) error {
 
 	defer db.Close()
 
-	// query := "DROP DATABASE IF EXISTS " + cfg.DbName
+	if err != nil {
+		return err
+	}
 
-	// fmt.Println(query)
+	err = db.Ping()
 
-	// _, err = db.Query(query)
+	if err != nil {
+		return err
+	}
+ 
+    fmt.Println("Connected!")
 
-	// if err != nil {
-	// 	return err
-	// }
+	query := "DROP DATABASE IF EXISTS " + cfg.DbName + " WITH (FORCE);"
+
+	fmt.Println(query)
+
+	_, err = db.Query(query)
+
+	if err != nil {
+		return err
+	}
 
 	query = fmt.Sprintf(`CREATE DATABASE %s
 WITH
