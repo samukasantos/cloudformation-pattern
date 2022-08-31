@@ -28,7 +28,7 @@ FROM alpine:latest
 
 WORKDIR /TechChallengeApp
 
-COPY conf.toml ./conf.toml
+COPY src/app/conf.toml ./conf.toml
 COPY --from=build /TechChallengeApp TechChallengeApp
 
 ENTRYPOINT [ "./TechChallengeApp", "updatedb -s", "serve" ]
