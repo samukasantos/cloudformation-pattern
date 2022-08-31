@@ -8,7 +8,7 @@ env:
   stackname:        'servian-techchallengeapp-fargate-api'
   albstackname:     'servian-alb'
   clusterstackname: 'servian-fargate-cluster'
-  dbstackname:      'servian-rds'
+  dbstackname:      'servian-postgres-rds'
   hostname:         'techchallengeapp'
   healthcheckpath:  '/healthcheck'
   s3arn           : 'arn:aws:s3:::servian-env-files/.env'
