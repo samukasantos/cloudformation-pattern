@@ -58,9 +58,13 @@ func RebuildDb(cfg Config) error {
 
 	defer db.Close()
 
+	fm.Println(cfg.DbHost)
+
 	query := "DROP DATABASE IF EXISTS " + cfg.DbName
 
 	fmt.Println(query)
+
+	
 
 	_, err = db.Query(query)
 
