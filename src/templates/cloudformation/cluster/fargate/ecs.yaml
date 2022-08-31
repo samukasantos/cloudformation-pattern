@@ -1,0 +1,243 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Fargate task and service
+Parameters:
+  AlbStackName:
+    Description: Alb stack name.
+    Type: String
+  ClusterStackName:
+    Description: ECS Cluster stack name.
+    Type: String
+  VpcId:
+    Description: VPC Id.
+    Type: AWS::EC2::VPC::Id
+    Default: vpc-0b3f9b5b5ed1e3146
+  SubnetType:
+    Description: Subnet type.
+    Type: String
+    AllowedValues: [public, private]
+    Default: public
+  DockerImage:
+    Default: Docker image.
+    Type: String
+    Default: servian/techchallengeapp:latest
+  ContainerPort:
+    Description: Container port.
+    Type: Number
+    Default: 3000
+  TargetGroupPort:
+    Description: Target group port.
+    Type: Number
+    Default: 3000
+  DbStackName:
+    Description: Database stack name.
+    Type: String
+    Default: ""
+  HealthCheckPath:
+    Description: Healthcheck path.
+    Type: String
+    Default: "/"
+  ListenerPriority:
+    Description: Listener priority.
+    Type: Number
+    Default: 1
+  Hostname:
+    Description: Application hostname.
+    Type: String
+    Default: "none"
+  Secrets:
+    Description: Enable Secrets manager.
+    Type: String
+    AllowedValues: [true, false]
+    Default: "false"
+  PublicSubnetA:
+    Description: Public subnet A.
+    Type: AWS::EC2::Subnet::Id
+    Default: subnet-0a9f792f28118ba7a
+  PublicSubnetB:
+    Description: Public subnet B.
+    Type: AWS::EC2::Subnet::Id
+    Default: subnet-0eddef6905bc935bb
+  S3Arn:
+    Description: S3 bucket environment variables.
+    Type: String
+Conditions:
+  HasDb:
+    Fn::Not:
+      - Fn::Equals:
+        - Ref: DbStackName
+        - ""
+  Public:
+    Fn::Equals:
+      - Ref: SubnetType
+      - "public"
+  Secrets:
+    Fn::Equals:
+      - Ref: Secrets
+      - "true"
+Resources:
+  TaskSecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Ref AWS::StackName
+      SecretString: '{"secret": "secret"}'
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ExecutionRoleArn:
+        Fn::ImportValue: !Sub "${ClusterStackName}-execution-role"
+      TaskRoleArn:
+        Fn::ImportValue: !Sub "${ClusterStackName}-${Hostname}-task-role"
+      ContainerDefinitions:
+        -
+          Name: !Ref AWS::StackName
+          Image: !Ref DockerImage
+          Cpu: 256
+          Memory: 512
+          EnvironmentFiles:
+            - Type: s3
+              Value: !Ref S3Arn
+          Essential: true
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref AWS::StackName
+              awslogs-region: !Ref AWS::Region
+              awslogs-create-group: true
+              awslogs-stream-prefix: !Ref AWS::StackName
+          PortMappings:
+          -
+            ContainerPort: !Ref ContainerPort
+            Protocol: HTTP
+          Secrets:
+            Fn::If:
+            - HasDb
+            - -
+                Name: SECRETS
+                ValueFrom: !Ref TaskSecrets
+              -
+                Name: VTT_DbHost
+                ValueFrom:
+                  Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
+                    - ":host::"
+              -
+                Name: VTT_DbPort
+                ValueFrom:
+                  Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
+                    - ":port::"
+              -
+                Name: VTT_DbName
+                ValueFrom:
+                  Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
+                    - ":dbname::"
+              -
+                Name: VTT_DbUser
+                ValueFrom:
+                  Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
+                    - ":username::"
+              -
+                Name: VTT_DbPassword
+                ValueFrom:
+                  Fn::Join:
+                  - ""
+                  - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
+                    - ":password::"
+            - -
+                Name: SECRETS
+                ValueFrom: !Ref TaskSecrets
+      Cpu: 256
+      Memory: 512
+      NetworkMode: awsvpc
+      RuntimePlatform:
+        OperatingSystemFamily: LINUX
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckPath: !Ref HealthCheckPath
+      Port: !Ref TargetGroupPort
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        !Ref VpcId
+  ListenerRule:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+      Conditions:
+        - Field: host-header
+          HostHeaderConfig:
+            Values:
+              - Fn::Join:
+                - ""
+                - - !Sub "${Hostname}."
+                  - Fn::ImportValue: !Sub "${AlbStackName}-domain"
+      ListenerArn:
+        Fn::ImportValue: !Sub "${AlbStackName}-listener"
+      Priority: !Ref ListenerPriority
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub "${AWS::StackName}"
+      SecurityGroupEgress:
+      - CidrIp: 0.0.0.0/0
+        Description: allow all outgoing
+        IpProtocol: '-1'
+      SecurityGroupIngress:
+      - SourceSecurityGroupId:
+          Fn::ImportValue: !Sub "${AlbStackName}-security-group"
+        FromPort: !Ref ContainerPort
+        IpProtocol: tcp
+        ToPort: !Ref ContainerPort
+      GroupName: !Sub "${AWS::StackName}"
+      VpcId:
+        !Ref VpcId
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+  Service:
+    Type: AWS::ECS::Service
+    Properties:
+      # EnableExecuteCommand: True
+      Cluster:
+        Fn::ImportValue: !Sub "${ClusterStackName}"
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: 1
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp:
+            Fn::If:
+            - Public
+            - ENABLED
+            - DISABLED
+          SecurityGroups:
+            - !Ref SecurityGroup
+          Subnets:
+            Fn::If:
+            - Public
+            - - !Ref PublicSubnetA
+              - !Ref PublicSubnetB
+            - - !Ref PublicSubnetA
+      LoadBalancers:
+        - ContainerName: !Ref AWS::StackName
+          ContainerPort: !Ref ContainerPort
+          TargetGroupArn: !Ref TargetGroup
+      TaskDefinition: !Ref TaskDefinition
+Outputs:
+  SecurityGroup:
+    Description: The Fargate Api Security Group
+    Value: !Ref SecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-security-group"

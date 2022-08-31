@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: 'VPC AZ Private'
+Parameters:
+  RegionAZName:
+    Description: Availability Zone name in region.
+    Type: AWS::EC2::AvailabilityZone::Name
+  PrivateSubnetCidr:
+    Description: CIDR block for the private subnet in availability zone.
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.10.32.0/19
+    Type: String
+  VpcStackName:
+    Description: Vpc-base stack name.
+    Type: String
+  VpcAzPublicStackName:
+    Description: Vpc public same region (e.g. Public-A - Private A).
+    Type: String
+Resources:
+  PrivateSubnet:
+    Properties:
+      AvailabilityZone: !Ref RegionAZName
+      CidrBlock: !Ref PrivateSubnetCidr
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}
+      VpcId:
+        Fn::ImportValue: !Ref VpcStackName
+    Type: AWS::EC2::Subnet
+  PrivateNetworkAcl:
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}
+      VpcId:
+        Fn::ImportValue: !Ref VpcStackName
+    Type: AWS::EC2::NetworkAcl
+  PrivateNetworkAclEntryInAllowVPC:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      CidrBlock: 0.0.0.0/0
+      Egress: false
+      NetworkAclId: !Ref PrivateNetworkAcl
+      Protocol: -1
+      RuleAction: allow
+      RuleNumber: 99
+  PrivateNetworkAclEntryOutAllowVPC:
+    Type: AWS::EC2::NetworkAclEntry
+    Properties:
+      CidrBlock: 0.0.0.0/0
+      Egress: true
+      NetworkAclId: !Ref PrivateNetworkAcl
+      Protocol: -1
+      RuleAction: allow
+      RuleNumber: 99
+  PrivateSubnetNetworkAclAssociation:
+    Properties:
+      NetworkAclId: !Ref PrivateNetworkAcl
+      SubnetId: !Ref PrivateSubnet
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+  PrivateRouteTable:
+    Properties:
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}
+      VpcId:
+        Fn::ImportValue: !Ref VpcStackName
+    Type: AWS::EC2::RouteTable
+  PrivateRouteTableAssociation:
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet
+    Type: AWS::EC2::SubnetRouteTableAssociation
+  NATGateway:
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+        - NATGatewayEIP
+        - AllocationId
+      SubnetId:
+        Fn::ImportValue: !Ref VpcAzPublicStackName
+      Tags:
+      - Key: Name
+        Value: !Sub ${AWS::StackName}-nat
+    Type: AWS::EC2::NatGateway
+  NATGatewayEIP:
+    Properties:
+      Domain: vpc
+    Type: AWS::EC2::EIP
+  NATGatewayRoute:
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref NATGateway
+      RouteTableId: !Ref PrivateRouteTable
+    Type: AWS::EC2::Route
+Outputs:
+  PrivateSubnet:
+    Description: The private subnet
+    Value: !Ref PrivateSubnet
+    Export:
+      Name: !Sub "${AWS::StackName}"
+  PrivateSubnetCidr:
+    Description: The private subnet cidr
+    Value: !Ref PrivateSubnetCidr
+    Export:
+      Name: !Sub "${AWS::StackName}-cidr"
