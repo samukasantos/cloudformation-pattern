@@ -22,7 +22,7 @@ package config
 
 import (
 	"strings"
-	"fmt"
+
 	"github.com/spf13/viper"
 )
 
@@ -43,31 +43,28 @@ func LoadConfig() (*Config, error) {
 
 	v := viper.New()
 
-	v.SetConfigFile(".env")
-	
-	// v.SetConfigName("conf")
-	// v.SetConfigType("toml")
-	// viper.SetConfigFile(".env")
-	// v.AddConfigPath(".")
+	//v.SetConfigFile(".env")
+	v.SetConfigName("conf")
+	v.SetConfigType("toml")
+	v.AddConfigPath(".")
 
-	// v.SetEnvPrefix("VTT")
-	// v.AutomaticEnv()
+	v.SetEnvPrefix("VTT")
+	v.AutomaticEnv()
 
-	// v.SetDefault("DbUser", "postgres")
-	// v.SetDefault("DbPassword", "postgres")
-	// v.SetDefault("DbName", "postgres")
-	// v.SetDefault("DbPort", "postgres")
-	// v.SetDefault("DbHost", "localhost")
+	v.SetDefault("DbUser", "postgres")
+	v.SetDefault("DbPassword", "postgres")
+	v.SetDefault("DbName", "postgres")
+	v.SetDefault("DbPort", "postgres")
+	v.SetDefault("DbHost", "localhost")
 
-	// v.SetDefault("ListenHost", "127.0.0.1")
-	// v.SetDefault("ListenPort", "3000")
+	v.SetDefault("ListenHost", "127.0.0.1")
+	v.SetDefault("ListenPort", "3000")
 
 	err := v.ReadInConfig() // Find and read the config file
 
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(v.GetString("ListenHost"))
 
 	conf.DbUser = strings.TrimSpace(v.GetString("DbUser"))
 	conf.DbPassword = strings.TrimSpace(v.GetString("DbPassword"))
