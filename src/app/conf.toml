@@ -1,6 +1,6 @@
 "DbUser" = "N3Xae326CHRgzTL9"
-"DbPassword" = "Mmh79pOPonrUyd21heFHS2NzCPRUDy"
-"DbName" = "app"
+"DbPassword" = "j7wpyFyKGk3H18xJqrphG5Rwh600V8"
+"DbName" = "techapp"
 "DbPort" = "5432"
 "DbHost" = "app.c4jez2letufb.ap-southeast-2.rds.amazonaws.com"
 "ListenHost" = "localhost"

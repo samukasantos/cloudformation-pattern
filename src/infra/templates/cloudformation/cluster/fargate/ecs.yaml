@@ -207,7 +207,6 @@ Resources:
   Service:
     Type: AWS::ECS::Service
     Properties:
-      # EnableExecuteCommand: True
       Cluster:
         Fn::ImportValue: !Sub "${ClusterStackName}"
       DeploymentConfiguration:
