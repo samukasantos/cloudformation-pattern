@@ -241,3 +241,13 @@ Outputs:
     Value: !Ref SecurityGroup
     Export:
       Name: !Sub "${AWS::StackName}-security-group"
+  FargateService:
+    Description: Fargate Service
+    Value: !GetAtt Service.Name
+    Export:
+      Name: !Sub "${AWS::StackName}-service-name"
+  TargetGroup:
+    Description: Target Group
+    Value: TargetGroup.TargetGroupFullName
+    Export:
+      Name: !Sub "${AWS::StackName}-target-group"

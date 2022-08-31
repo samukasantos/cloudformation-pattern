@@ -7,6 +7,9 @@ Parameters:
   ClusterStackName:
     Description: ECS Cluster stack name.
     Type: String
+  FargateServiceStackName:
+    Description: Fargate service stack name.
+    Type: String
   MaxContainers:
     Description: Max containers to scale to.
     Type: Number
@@ -47,7 +50,7 @@ Resources:
         - '/'
         - - service
           - Fn::ImportValue: !Sub ${ClusterStackName}
-          - !GetAtt FargateService.Name
+          - Fn::ImportValue: !Sub '${FargateServiceStackName}-service-name'
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
       RoleARN: !GetAtt AutoScalingRole.Arn
@@ -87,7 +90,7 @@ Resources:
         - !Ref ScaleUpPolicy
       AlarmDescription: !Sub
         - 'Scale Up Alarm based on requests for ${FargateServiceName}'
-        - FargateServiceName: !GetAtt FargateService.Name
+        - Fn::ImportValue: !Sub '${FargateServiceStackName}-service-name'
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 2
       Dimensions:
@@ -103,10 +106,3 @@ Resources:
       Threshold: 3000
       TreatMissingData: ignore
       Unit: None
-
-Outputs:
-  FargateServiceName:
-    Description: A reference to the created Fargate Service
-    Value: !GetAtt FargateService.Name
-    Export:
-      Name: !Sub ${AWS::StackName}-fargate-service-name
