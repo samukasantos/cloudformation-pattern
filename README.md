@@ -17,3 +17,16 @@ The repository features a set of templates that implement the following:
 - Database instances (PostgreSQL) in different Availability Zones.
 - Auto Scaling with alarm to validate requests submitted to applications.
 - Roles associated with running tasks on the Fargate, AutoScaling and OIDC.
+
+
+## Why Cloudformation ?
+
+Using CloudFormation to deploy and manage services on AWS brings more benefits than traditional methods like using the AWS CLI, scripting or even using the AWS console.
+
+## Template Details
+
+| Path | Name | Description |
+| --- | --- |  --- |
+| /src/templates/cloudformation/vpc/vpc-base.yaml | Vpc-Base | This template deploys a VPC base with an Internet gateway and VPC Flow logs. |
+| /src/templates/cloudformation/vpc/vpc-az-public.yaml | This template deploys public subnets onto Availability Zone. |
+| /src/templates/cloudformation/vpc/vpc-az-private.yaml | This template deploys private subnets onto Availability Zones. It deploys NAT gateway and default routes in the private subnets |
