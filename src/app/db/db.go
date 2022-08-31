@@ -70,15 +70,16 @@ func RebuildDb(cfg Config) error {
  
     fmt.Println("Connected!")
 
-	query := "DROP DATABASE IF EXISTS " + cfg.DbName + " WITH (FORCE);"
+	//query := "DROP DATABASE IF EXISTS " + cfg.DbName + " WITH (FORCE);"
+	query := ""
 
-	fmt.Println(query)
+	// fmt.Println(query)
 
-	_, err = db.Query(query)
+	// _, err = db.Query(query)
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
 
 	query = fmt.Sprintf(`CREATE DATABASE %s
 WITH
@@ -116,15 +117,16 @@ func CreateTable(cfg Config) error {
 
 	defer tx.Rollback()
 
-	query := "DROP TABLE IF EXISTS tasks CASCADE"
+	//query := "DROP TABLE IF EXISTS tasks CASCADE"
+	query := ""
 
-	fmt.Println(query)
+	//fmt.Println(query)
 
-	_, err = tx.Exec(query)
+	//_, err = tx.Exec(query)
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
 
 	query = "CREATE TABLE IF NOT EXISTS tasks ( id SERIAL PRIMARY KEY, completed boolean NOT NULL, priority integer NOT NULL, title text NOT NULL)"
 
