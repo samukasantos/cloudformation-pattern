@@ -49,12 +49,12 @@ Parameters:
     Type: String
     AllowedValues: [true, false]
     Default: "false"
-  PublicSubnetA:
-    Description: Public subnet A.
+  PrivateSubnetA:
+    Description: Private subnet A.
     Type: AWS::EC2::Subnet::Id
     Default: subnet-0a9f792f28118ba7a
-  PublicSubnetB:
-    Description: Public subnet B.
+  PrivateSubnetB:
+    Description: Private subnet B.
     Type: AWS::EC2::Subnet::Id
     Default: subnet-0eddef6905bc935bb
   S3Arn:
@@ -225,11 +225,8 @@ Resources:
           SecurityGroups:
             - !Ref SecurityGroup
           Subnets:
-            Fn::If:
-            - Public
-            - - !Ref PublicSubnetA
-              - !Ref PublicSubnetB
-            - - !Ref PublicSubnetA
+            - !Ref PrivateSubnetA
+            - !Ref PrivateSubnetB
       LoadBalancers:
         - ContainerName: !Ref AWS::StackName
           ContainerPort: !Ref ContainerPort
