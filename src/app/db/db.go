@@ -95,7 +95,7 @@ func RebuildDb(cfg Config) error {
 
 // 	_, err = db.Query(query)
 
-// 	return err
+ 	return nil
 }
 
 func CreateTable(cfg Config) error {
