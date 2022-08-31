@@ -41,7 +41,8 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 
 ## The stack output is presented by: 
 
-<img width="1342" alt="Screen Shot 2022-09-01 at 2 03 23 am" src="https://user-images.githubusercontent.com/5481198/187725832-35e757c7-5215-4eca-b363-92f7e3c89993.png">
+<img width="1342" alt="Screen Shot 2022-09-01 at 5 29 34 am" src="https://user-images.githubusercontent.com/5481198/187766137-d866cd69-135a-4cb6-a82f-da88fd896df5.png">
+
 
 ## CI/CD Workflow
 
@@ -50,4 +51,13 @@ The build and deployment automation is done through GitHub Actions, in the follo
 - Build and add the resulting image in ECR (Elastic Container Registry)
 - Deploys the ECS Fargate cluster with the changes inferred in the current commit, the template is stored in an S3 bucket to which only the repository has access through a trust relationship.
 - It is important to remember that an S3 bucket contains a file that represents the environment variables that are consequently embedded in the container during deployment.
+
+## Application
+
+Used a domain for deployment of the application, domain registered in Route53 and routing to the Load Balancer of the present solution.
+
+<img width="1324" alt="Screen Shot 2022-09-01 at 5 31 36 am" src="https://user-images.githubusercontent.com/5481198/187766755-665e9cf4-50dd-456c-9425-7ceab015e221.png">
+
+
+
 
