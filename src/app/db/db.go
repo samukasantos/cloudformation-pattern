@@ -116,15 +116,15 @@ func CreateTable(cfg Config) error {
 
 	defer tx.Rollback()
 
-	// query := "DROP TABLE IF EXISTS tasks CASCADE"
+	query := "DROP TABLE IF EXISTS tasks CASCADE"
 
-	// fmt.Println(query)
+	fmt.Println(query)
 
-	// _, err = tx.Exec(query)
+	_, err = tx.Exec(query)
 
-	// if err != nil {
-	// 	return err
-	// }
+	if err != nil {
+		return err
+	}
 
 	query = "CREATE TABLE IF NOT EXISTS tasks ( id SERIAL PRIMARY KEY, completed boolean NOT NULL, priority integer NOT NULL, title text NOT NULL)"
 
