@@ -66,7 +66,7 @@ func RebuildDb(cfg Config) error {
 		return err
 	}
 
-	query := "DROP DATABASE IF EXISTS " + cfg.DbName
+	query := "DROP DATABASE IF EXISTS " + cfg.DbName + " WITH (FORCE);"
 
 	fmt.Println(query)
 
