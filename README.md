@@ -43,7 +43,7 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 
 <img width="1342" alt="Screen Shot 2022-09-01 at 2 03 23 am" src="https://user-images.githubusercontent.com/5481198/187725832-35e757c7-5215-4eca-b363-92f7e3c89993.png">
 
-## CICD Workflow
+## CI/CD Workflow
 
 The build and deployment automation is done through GitHub Actions, in the following steps:
   - Login to AWS using STS Credentials.
