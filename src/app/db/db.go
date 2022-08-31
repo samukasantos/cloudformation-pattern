@@ -50,6 +50,8 @@ func RebuildDb(cfg Config) error {
 	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword, cfg.DbName)
 
+	fmt.Println(dbinfo)
+
 	db, err := sql.Open("postgres", dbinfo)
 
 	if err != nil {
@@ -58,13 +60,15 @@ func RebuildDb(cfg Config) error {
 
 	defer db.Close()
 
-	fmt.Println(cfg.DbHost)
+	err = db.Ping()
+
+	if err != nil {
+		return err
+	}
 
 	query := "DROP DATABASE IF EXISTS " + cfg.DbName
 
 	fmt.Println(query)
-
-	
 
 	_, err = db.Query(query)
 
