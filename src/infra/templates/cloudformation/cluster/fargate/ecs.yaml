@@ -115,7 +115,7 @@ Resources:
                 Name: SECRETS
                 ValueFrom: !Ref TaskSecrets
               -
-                Name: VTT_DBPORT
+                Name: VTT_HOST
                 ValueFrom:
                   Fn::Join:
                   - ""
