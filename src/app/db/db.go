@@ -71,7 +71,7 @@ func RebuildDb(cfg Config) error {
     fmt.Println("Connected!")
 
 	//query := "DROP DATABASE IF EXISTS " + cfg.DbName + " WITH (FORCE);"
-	query := ""
+	//query := ""
 
 	// fmt.Println(query)
 
@@ -81,21 +81,21 @@ func RebuildDb(cfg Config) error {
 	// 	return err
 	// }
 
-	query = fmt.Sprintf(`CREATE DATABASE %s
-WITH
-OWNER = %s
-ENCODING = 'UTF8'
-LC_COLLATE = 'en_US.utf8'
-LC_CTYPE = 'en_US.utf8'
-TABLESPACE = pg_default
-CONNECTION LIMIT = -1
-TEMPLATE template0;`, cfg.DbName, cfg.DbUser)
+// 	query = fmt.Sprintf(`CREATE DATABASE %s
+// WITH
+// OWNER = %s
+// ENCODING = 'UTF8'
+// LC_COLLATE = 'en_US.utf8'
+// LC_CTYPE = 'en_US.utf8'
+// TABLESPACE = pg_default
+// CONNECTION LIMIT = -1
+// TEMPLATE template0;`, cfg.DbName, cfg.DbUser)
 
-	fmt.Println(query)
+// 	fmt.Println(query)
 
-	_, err = db.Query(query)
+// 	_, err = db.Query(query)
 
-	return err
+// 	return err
 }
 
 func CreateTable(cfg Config) error {
