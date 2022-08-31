@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Auto-Scaling
 Parameters:
   VpcStackName:
-   Description: VPC base stack name.
+    Description: VPC base stack name.
     Type: AWS::EC2::VPC::Id
   ClusterStackName:
     Description: ECS Cluster stack name.
@@ -58,7 +58,7 @@ Resources:
   ScaleUpPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub '${FargateService}ScaleUpPolicy'
+      PolicyName: !Sub '${FargateServiceStackName}-scaleup-policy'
       PolicyType: StepScaling
       ScalingTargetId: !Ref AutoScalingTarget
       StepScalingPolicyConfiguration:
@@ -71,7 +71,7 @@ Resources:
   ScaleDownPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub '${FargateService}ScaleDownPolicy'
+      PolicyName: !Sub '${FargateServiceStackName}-scaledonw-policy'
       PolicyType: StepScaling
       ScalingTargetId: !Ref AutoScalingTarget
       StepScalingPolicyConfiguration:
@@ -88,14 +88,12 @@ Resources:
       ActionsEnabled: TRUE
       AlarmActions:
         - !Ref ScaleUpPolicy
-      AlarmDescription: !Sub
-        - 'Scale Up Alarm based on requests for ${FargateServiceName}'
-        - Fn::ImportValue: !Sub '${FargateServiceStackName}-service-name'
+      AlarmDescription: !Sub 'Scale Up Alarm based on requests for ${FargateServiceStackName}'
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 2
       Dimensions:
         - Name: TargetGroup
-          Value: !GetAtt TargetGroup.TargetGroupFullName
+          Value: 'target-group'
       EvaluationPeriods: 3
       MetricName: RequestCountPerTarget
       Namespace: AWS/ApplicationELB
