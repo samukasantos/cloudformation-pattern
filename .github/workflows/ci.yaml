@@ -2,7 +2,7 @@ name: techchallengeapp-ci
 on:
   push:
     branches:
-      - main
+      - feature/ci-pipeline-workflow
 
 env:
   stackname:        'servian-techchallengeapp-fargate-api'
