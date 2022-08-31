@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ECR
+Parameters:
+  RepositoryName:
+    Description: Repository name.
+    Type: String
+Resources:
+  ECRRepository:
+      Type: AWS::ECR::Repository
+      Properties:
+        RepositoryName: !Ref RepositoryName
+        ImageScanningConfiguration:
+          ScanOnPush: True
+        ImageTagMutability: IMMUTABLE
+        LifecyclePolicy:
+            LifecyclePolicyText: |
+              {
+                "rules": [
+                { 
+                  "rulePriority": 1,
+                  "description":  "Remove older versions",
+                  "selection": 
+                  {
+                      "tagStatus": "any",
+                      "countType": "imageCountMoreThan",
+                      "countNumber": 10 
+                  },
+                  "action": { "type": "expire" }
+                }]
+              }

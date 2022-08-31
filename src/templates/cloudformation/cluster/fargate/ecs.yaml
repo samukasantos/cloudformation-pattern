@@ -10,6 +10,7 @@ Parameters:
   VpcId:
     Description: VPC Id.
     Type: AWS::EC2::VPC::Id
+    Default: vpc-0b3f9b5b5ed1e3146
   SubnetType:
     Description: Subnet type.
     Type: String
@@ -51,9 +52,11 @@ Parameters:
   PublicSubnetA:
     Description: Public subnet A.
     Type: AWS::EC2::Subnet::Id
+    Default: subnet-0a9f792f28118ba7a
   PublicSubnetB:
     Description: Public subnet B.
     Type: AWS::EC2::Subnet::Id
+    Default: subnet-0eddef6905bc935bb
   S3Arn:
     Description: S3 bucket environment variables.
     Type: String
