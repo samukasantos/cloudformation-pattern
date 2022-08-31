@@ -1,20 +1,26 @@
-AWSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: "2010-09-09"
 Description: Application Load Balancer
 Parameters:
   VpcStackName:
+    Description: VPC base stack name.
     Type: AWS::EC2::VPC::Id
   SubnetType:
+    Description: Subnet type.
     Type: String
     AllowedValues: [public, private]
     Default: public
   PublicSubnetA:
+    Description: Public subnet A.
     Type: AWS::EC2::Subnet::Id
   PublicSubnetB:
+    Description: Public subnet B.
     Type: AWS::EC2::Subnet::Id
   WebCidr:
+    Description: Cidr security group ingress.
     Type: String
-    Default: 0.0.0.0/32
+    Default: 0.0.0.0/0
   Domain:
+    Description: Application domain.
     Type: String
 Resources:
   SecurityGroup:

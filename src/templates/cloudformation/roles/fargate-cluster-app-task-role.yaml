@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ECS Task Role
+Parameters:
+  ClusterStackName:
+    Description: ECS Cluster stack name.
+    Type: String
+  Hostname:
+    Description: Application host name.
+    Type: String
+Resources:
+  ECSTaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${ClusterStackName}-${Hostname}-task-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: "ecs-tasks.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                - "rds-db:connect"
+                - "secretsmanager:GetSecretValue"
+                - "kms:Decrypt"
+                Resource: "*"
+Outputs:
+  ExecutionRole:
+    Description: The Cluster Task Role Policy
+    Value: !Ref ECSTaskRole
+    Export:
+      Name: !Sub "${ClusterStackName}-${Hostname}-task-role"

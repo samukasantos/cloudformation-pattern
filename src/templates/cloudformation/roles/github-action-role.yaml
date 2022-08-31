@@ -1,20 +1,20 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Description: GitHub Actions role
 Parameters:
   GitHubOrg:
+    Description: GitHub Organization.
     Type: String
   RepositoryName:
+    Description: Repository name.
     Type: String
   OIDCProviderArn:
     Description: Arn for the GitHub OIDC Provider.
     Default: ""
     Type: String
-
 Conditions:
   CreateOIDCProvider: !Equals 
     - !Ref OIDCProviderArn
     - ""
-
 Resources:
   Role:
     Type: AWS::IAM::Role

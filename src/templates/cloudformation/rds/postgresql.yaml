@@ -1,94 +1,97 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Description: 'This template builds an Amazon AWS RDS Postgresql database instance.'
 Parameters:
   AlbStackName:
+    Description: Alb stack name.
     Type: String
   DBAllocatedStorage:
+    Description: General Purpose (SSD) storage (gp2). Must be an integer from 200 to 16384.
     ConstraintDescription: Must be an integer from 20 to 16384.
     Default: '20'
-    Description: General Purpose (SSD) storage (gp2). Must be an integer from 200
-      to 16384.
     MaxValue: '16384'
     MinValue: '20'
     Type: Number
   DBBackupRetentionPeriod:
-    ConstraintDescription: must be a number between 0 and 10.
-    Default: '1'
     Description: The number of days for which automated backups are retained. Allowed
       values 0-10. Setting this parameter to a positive number enables backups. Setting
       this parameter to 0 disables automated backups.
+    ConstraintDescription: must be a number between 0 and 10.
+    Default: '1'
     MaxValue: '10'
     MinValue: '0'
     Type: Number
   DBEngineVersion:
-    Default: 11.12
     Description: The database engine version
+    Default: 11.12
     Type: String
   DBInputCIDR:
+    Description: CIDR to allow access to DB instances
     AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
-    Description: CIDR to allow access to DB instances
     Type: String
   DBInstanceClass:
+    Description: The database instance type.
     AllowedValues:
     - db.m5.large
     ConstraintDescription: must select a valid database instance type.
     Default: db.m5.large
-    Description: The database instance type
     Type: String
   DBInstanceIdentifier:
+    Description: Database instance identifier.
     Type: String
   DBName:
-    Description: The name of the database to create in the instance
+    Description: The name of the database to create in the instance.
     Type: String
   DBRootUsername:
+    Description: The database admin account username.
     AllowedPattern: ^[\w]+$
     ConstraintDescription: Minimum 5 characters must begin with a letter and contain
       only alphanumeric and underscore characters.
-    Description: The database admin account username
     MaxLength: '16'
     MinLength: '4'
     Type: String
   DBPortNumber:
+    Description: The port number on which the database accepts connections.
     ConstraintDescription: 5432 is the only possible value
     Default: '5432'
-    Description: The port number on which the database accepts connections.
     MaxValue: '5432'
     MinValue: '5432'
     Type: Number
   DbSubnetA:
+    Description: Subnet A.
     Type: AWS::EC2::Subnet::Id
   DbSubnetB:
+    Description: Subnet B.
     Type: AWS::EC2::Subnet::Id
   DBParameterGroupFamily:
+    Description: Database group family.
     Type: String
     Default: postgres11
   DBVPC:
+    Description: Define the VPC where the RDS database will be created.
     ConstraintDescription: must be an existing VPC
-    Description: Select the VPC where the RDS database will be created
     Type: AWS::EC2::VPC::Id
   DBVPCCIDR:
+    Description: Define the VPC where the RDS database will be created.
     ConstraintDescription: CIDR of VPC to allow access
-    Description: Select the VPC where the RDS database will be created
     Type: String
   MultiAZ:
+    Description: Multi-AZ database.
     AllowedValues:
     - 'true'
     - 'false'
     ConstraintDescription: must be true or false.
     Default: 'false'
-    Description: Multi-AZ database
     Type: String
   EncyrptionAtRest:
+    Description: Enable encryption at rest.
     AllowedValues:
     - 'true'
     - 'false'
     ConstraintDescription: must be true or false.
     Default: 'false'
-    Description: Enable encryption at rest
     Type: String
 Resources:
-
   DBSecrets:
     Type: AWS::SecretsManager::Secret
     Properties:
@@ -98,7 +101,6 @@ Resources:
         GenerateStringKey: "password"
         PasswordLength: 30
         ExcludePunctuation: True
-
   DBEC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:

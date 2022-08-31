@@ -1,19 +1,19 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Description: 'VPC Base'
 Parameters:
   EnableVPCFlowLogs:
+    Description: Create a Flow logs for the VPC.
     AllowedValues:
     - true
     - false
     ConstraintDescription: ''
     Default: true
-    Description: Create a Flow logs for the VPC
     Type: String
   VPCCIDR:
+    Description: CIDR block for the VPC.
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.10.0.0/16
-    Description: CIDR block for the VPC
     Type: String
 Conditions:
   CreateVPCFlowLogs:
