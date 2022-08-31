@@ -2,10 +2,13 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Auto-Scaling
 Parameters:
   VpcStackName:
-   Description: VPC base stack name.
+    Description: VPC base stack name.
     Type: AWS::EC2::VPC::Id
   ClusterStackName:
     Description: ECS Cluster stack name.
+    Type: String
+  FargateServiceStackName:
+    Description: Fargate service stack name.
     Type: String
   MaxContainers:
     Description: Max containers to scale to.
@@ -47,7 +50,7 @@ Resources:
         - '/'
         - - service
           - Fn::ImportValue: !Sub ${ClusterStackName}
-          - !GetAtt FargateService.Name
+          - Fn::ImportValue: !Sub '${FargateServiceStackName}-service-name'
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
       RoleARN: !GetAtt AutoScalingRole.Arn
@@ -55,7 +58,7 @@ Resources:
   ScaleUpPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub '${FargateService}ScaleUpPolicy'
+      PolicyName: !Sub '${FargateServiceStackName}-scaleup-policy'
       PolicyType: StepScaling
       ScalingTargetId: !Ref AutoScalingTarget
       StepScalingPolicyConfiguration:
@@ -68,7 +71,7 @@ Resources:
   ScaleDownPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub '${FargateService}ScaleDownPolicy'
+      PolicyName: !Sub '${FargateServiceStackName}-scaledonw-policy'
       PolicyType: StepScaling
       ScalingTargetId: !Ref AutoScalingTarget
       StepScalingPolicyConfiguration:
@@ -85,14 +88,12 @@ Resources:
       ActionsEnabled: TRUE
       AlarmActions:
         - !Ref ScaleUpPolicy
-      AlarmDescription: !Sub
-        - 'Scale Up Alarm based on requests for ${FargateServiceName}'
-        - FargateServiceName: !GetAtt FargateService.Name
+      AlarmDescription: !Sub 'Scale Up Alarm based on requests for ${FargateServiceStackName}'
       ComparisonOperator: GreaterThanThreshold
       DatapointsToAlarm: 2
       Dimensions:
         - Name: TargetGroup
-          Value: !GetAtt TargetGroup.TargetGroupFullName
+          Value: 'target-group'
       EvaluationPeriods: 3
       MetricName: RequestCountPerTarget
       Namespace: AWS/ApplicationELB
@@ -103,10 +104,3 @@ Resources:
       Threshold: 3000
       TreatMissingData: ignore
       Unit: None
-
-Outputs:
-  FargateServiceName:
-    Description: A reference to the created Fargate Service
-    Value: !GetAtt FargateService.Name
-    Export:
-      Name: !Sub ${AWS::StackName}-fargate-service-name

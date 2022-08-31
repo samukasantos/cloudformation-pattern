@@ -34,19 +34,30 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 | /src/templates/cloudformation/cluster/fargate/cluster.yaml | ecs cluster | This template deploys an ECS cluster. |
 | /src/templates/cloudformation/cluster/fargate/ecs.yaml | ecs service | This template deploys an ECS service with taskdefinition to the private subnets, security group and it is responsible to inject the database credentials into Secrets Manager which will be available in the task via environment variables. |
 | /src/templates/cloudformation/ecr/ecr.yaml | ecr | This template deploys an ECR repository for the images related to the current project. |
+| /src/templates/cloudformation/autoscaling/autoscaler.yaml| Auto scaling | This template deploys Auto Scaling with policies and alarm. |
 | /src/templates/cloudformation/rds/postgresql.yaml | rds | This template deploys a Postgres database to multiple AZs with the securit group associated. |
 | /src/templates/cloudformation/roles/github-action-role.yaml| GitHub role | This template deploys a role used by this repository to deploy in the AWS provider, the account used was created using AWS Organization with AWS SSO and this is the OIDC Github provider. |
 | /src/templates/cloudformation/roles/fargate-cluster-app-task-role.yaml| Farget task role | This template deploys an additional role for the Fargate to make possible the tasks communicate with AWS Apis. |
 
 ## The stack output is presented by: 
 
-<img width="1342" alt="Screen Shot 2022-09-01 at 2 03 23 am" src="https://user-images.githubusercontent.com/5481198/187725832-35e757c7-5215-4eca-b363-92f7e3c89993.png">
+<img width="1342" alt="Screen Shot 2022-09-01 at 5 29 34 am" src="https://user-images.githubusercontent.com/5481198/187766137-d866cd69-135a-4cb6-a82f-da88fd896df5.png">
 
-## CICD Workflow
+
+## CI/CD Workflow
 
 The build and deployment automation is done through GitHub Actions, in the following steps:
   - Login to AWS using STS Credentials.
 - Build and add the resulting image in ECR (Elastic Container Registry)
 - Deploys the ECS Fargate cluster with the changes inferred in the current commit, the template is stored in an S3 bucket to which only the repository has access through a trust relationship.
 - It is important to remember that an S3 bucket contains a file that represents the environment variables that are consequently embedded in the container during deployment.
+
+## Application
+
+Used a domain for deployment of the application, domain registered in Route53 and routing to the Load Balancer of the present solution.
+
+<img width="1324" alt="Screen Shot 2022-09-01 at 5 31 36 am" src="https://user-images.githubusercontent.com/5481198/187766755-665e9cf4-50dd-456c-9425-7ceab015e221.png">
+
+
+
 

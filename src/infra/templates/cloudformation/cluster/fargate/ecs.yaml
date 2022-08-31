@@ -49,14 +49,14 @@ Parameters:
     Type: String
     AllowedValues: [true, false]
     Default: "false"
-  PublicSubnetA:
-    Description: Public subnet A.
+  PrivateSubnetA:
+    Description: Private subnet A.
     Type: AWS::EC2::Subnet::Id
-    Default: subnet-0a9f792f28118ba7a
-  PublicSubnetB:
-    Description: Public subnet B.
+    Default: subnet-09d046d68ea4a5830
+  PrivateSubnetB:
+    Description: Private subnet B.
     Type: AWS::EC2::Subnet::Id
-    Default: subnet-0eddef6905bc935bb
+    Default: subnet-0d4b995fa52527f88
   S3Arn:
     Description: S3 bucket environment variables.
     Type: String
@@ -115,35 +115,35 @@ Resources:
                 Name: SECRETS
                 ValueFrom: !Ref TaskSecrets
               -
-                Name: VTT_DbHost
+                Name: VTT_HOST
                 ValueFrom:
                   Fn::Join:
                   - ""
                   - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
                     - ":host::"
               -
-                Name: VTT_DbPort
+                Name: VTT_DBPORT
                 ValueFrom:
                   Fn::Join:
                   - ""
                   - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
                     - ":port::"
               -
-                Name: VTT_DbName
+                Name: VTT_DBNAME
                 ValueFrom:
                   Fn::Join:
                   - ""
                   - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
                     - ":dbname::"
               -
-                Name: VTT_DbUser
+                Name: VTT_DBUSER
                 ValueFrom:
                   Fn::Join:
                   - ""
                   - - Fn::ImportValue: !Sub "${DbStackName}-secrets"
                     - ":username::"
               -
-                Name: VTT_DbPassword
+                Name: VTT_DBPASSWORD
                 ValueFrom:
                   Fn::Join:
                   - ""
@@ -207,7 +207,6 @@ Resources:
   Service:
     Type: AWS::ECS::Service
     Properties:
-      # EnableExecuteCommand: True
       Cluster:
         Fn::ImportValue: !Sub "${ClusterStackName}"
       DeploymentConfiguration:
@@ -225,11 +224,8 @@ Resources:
           SecurityGroups:
             - !Ref SecurityGroup
           Subnets:
-            Fn::If:
-            - Public
-            - - !Ref PublicSubnetA
-              - !Ref PublicSubnetB
-            - - !Ref PublicSubnetA
+            - !Ref PrivateSubnetA
+            - !Ref PrivateSubnetB
       LoadBalancers:
         - ContainerName: !Ref AWS::StackName
           ContainerPort: !Ref ContainerPort
@@ -241,3 +237,13 @@ Outputs:
     Value: !Ref SecurityGroup
     Export:
       Name: !Sub "${AWS::StackName}-security-group"
+  FargateService:
+    Description: Fargate Service
+    Value: !GetAtt Service.Name
+    Export:
+      Name: !Sub "${AWS::StackName}-service-name"
+  TargetGroup:
+    Description: Target Group
+    Value: !GetAtt TargetGroup.TargetGroupFullName
+    Export:
+      Name: !Sub "${AWS::StackName}-target-group"

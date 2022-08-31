@@ -8,8 +8,7 @@ env:
   stackname:        'servian-techchallengeapp-fargate-api'
   albstackname:     'servian-alb'
   clusterstackname: 'servian-fargate-cluster'
-  dbsecretname:     'topplar-database'
-  dbstackname:      'servian-rds'
+  dbstackname:      'servian-postgres-rds'
   hostname:         'techchallengeapp'
   healthcheckpath:  '/healthcheck'
   s3arn           : 'arn:aws:s3:::servian-env-files/.env'
@@ -42,7 +41,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f src/app/Dockerfile .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
       
@@ -50,13 +49,13 @@ jobs:
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: ${{ env.stackname }}
-          template: ./templates/cluster/fargate/ecs.yaml
+          template: https://servian-cf-templates.s3.ap-southeast-2.amazonaws.com/ecs.yaml
           no-fail-on-empty-changeset: "1"
           parameter-overrides: >-
             AlbStackName=${{ env.albstackname }},
             ClusterStackName=${{ env.clusterstackname }},
             DbStackName=${{ env.dbstackname }},
-            Hostname=${{ env.hostname }},
             DockerImage=${{ steps.build-image.outputs.image }},
             HealthCheckPath=${{ env.healthcheckpath }},
-            S3Arn=${{ env.s3arn }},
+            Hostname=${{ env.hostname }},
+            S3Arn=${{ env.s3arn }}

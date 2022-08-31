@@ -22,7 +22,7 @@ Parameters:
     Type: Number
   DBEngineVersion:
     Description: The database engine version
-    Default: 11.12
+    Default: 13.7
     Type: String
   DBInputCIDR:
     Description: CIDR to allow access to DB instances
@@ -66,7 +66,7 @@ Parameters:
   DBParameterGroupFamily:
     Description: Database group family.
     Type: String
-    Default: postgres11
+    Default: postgres13
   DBVPC:
     Description: Define the VPC where the RDS database will be created.
     ConstraintDescription: must be an existing VPC

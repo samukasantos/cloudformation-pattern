@@ -13,7 +13,7 @@ RUN go install github.com/GeertJohan/go.rice/rice@latest
 
 WORKDIR $GOPATH/src/github.com/servian/TechChallengeApp
 
-COPY . .
+COPY src/app .
 
 RUN go mod tidy
 
@@ -28,7 +28,7 @@ FROM alpine:latest
 
 WORKDIR /TechChallengeApp
 
-COPY conf.toml ./conf.toml
+COPY src/app/conf.toml ./conf.toml
 COPY --from=build /TechChallengeApp TechChallengeApp
 
-ENTRYPOINT [ "./TechChallengeApp", "updatedb -s", "serve" ]
+ENTRYPOINT [ "./TechChallengeApp", "serve" ]

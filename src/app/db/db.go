@@ -47,8 +47,8 @@ func getDbInfo(cfg Config) string {
 
 // RebuildDb drops the database and recreates it
 func RebuildDb(cfg Config) error {
-	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=postgres sslmode=disable",
-		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword)
+	dbinfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		cfg.DbHost, cfg.DbPort, cfg.DbUser, cfg.DbPassword, cfg.DbName)
 
 	db, err := sql.Open("postgres", dbinfo)
 
@@ -58,31 +58,44 @@ func RebuildDb(cfg Config) error {
 
 	defer db.Close()
 
-	query := "DROP DATABASE IF EXISTS " + cfg.DbName
-
-	fmt.Println(query)
-
-	_, err = db.Query(query)
-
 	if err != nil {
 		return err
 	}
 
-	query = fmt.Sprintf(`CREATE DATABASE %s
-WITH
-OWNER = %s
-ENCODING = 'UTF8'
-LC_COLLATE = 'en_US.utf8'
-LC_CTYPE = 'en_US.utf8'
-TABLESPACE = pg_default
-CONNECTION LIMIT = -1
-TEMPLATE template0;`, cfg.DbName, cfg.DbUser)
+	err = db.Ping()
 
-	fmt.Println(query)
+	if err != nil {
+		return err
+	}
+ 
+    fmt.Println("Connected!")
 
-	_, err = db.Query(query)
+	//query := "DROP DATABASE IF EXISTS " + cfg.DbName + " WITH (FORCE);"
+	//query := ""
 
-	return err
+	// fmt.Println(query)
+
+	// _, err = db.Query(query)
+
+	// if err != nil {
+	// 	return err
+	// }
+
+// 	query = fmt.Sprintf(`CREATE DATABASE %s
+// WITH
+// OWNER = %s
+// ENCODING = 'UTF8'
+// LC_COLLATE = 'en_US.utf8'
+// LC_CTYPE = 'en_US.utf8'
+// TABLESPACE = pg_default
+// CONNECTION LIMIT = -1
+// TEMPLATE template0;`, cfg.DbName, cfg.DbUser)
+
+// 	fmt.Println(query)
+
+// 	_, err = db.Query(query)
+
+ 	return nil
 }
 
 func CreateTable(cfg Config) error {
@@ -104,17 +117,18 @@ func CreateTable(cfg Config) error {
 
 	defer tx.Rollback()
 
-	query := "DROP TABLE IF EXISTS tasks CASCADE"
+	//query := "DROP TABLE IF EXISTS tasks CASCADE"
+	query := ""
 
-	fmt.Println(query)
+	//fmt.Println(query)
 
-	_, err = tx.Exec(query)
+	//_, err = tx.Exec(query)
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
 
-	query = "CREATE TABLE tasks ( id SERIAL PRIMARY KEY, completed boolean NOT NULL, priority integer NOT NULL, title text NOT NULL)"
+	query = "CREATE TABLE IF NOT EXISTS tasks ( id SERIAL PRIMARY KEY, completed boolean NOT NULL, priority integer NOT NULL, title text NOT NULL)"
 
 	fmt.Println(query)
 
