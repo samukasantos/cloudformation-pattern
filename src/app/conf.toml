@@ -3,5 +3,5 @@
 "DbName" = "techapp"
 "DbPort" = "5432"
 "DbHost" = "app.c4jez2letufb.ap-southeast-2.rds.amazonaws.com"
-"ListenHost" = "localhost"
+"ListenHost" = "0.0.0.0"
 "ListenPort" = "3000"
