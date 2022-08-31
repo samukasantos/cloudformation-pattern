@@ -31,4 +31,4 @@ WORKDIR /TechChallengeApp
 COPY src/app/conf.toml ./conf.toml
 COPY --from=build /TechChallengeApp TechChallengeApp
 
-ENTRYPOINT [ "./TechChallengeApp", "updatedb", "serve" ]
+ENTRYPOINT [ "./TechChallengeApp", "serve" ]
