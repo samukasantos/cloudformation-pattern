@@ -61,6 +61,8 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 - ECR for store images (ecr.yaml)
 - ALB setup with granular settings (certificate and listeners) (alb.yaml)
 - ECS Service with service and task definitions (ecs.yaml)
+- Auto-Scaling (auto-scaler.yaml)
+- RDS Postgres database (postgres.yaml)
 
 # Getting started
 
