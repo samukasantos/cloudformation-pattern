@@ -151,10 +151,9 @@ Used a domain for deployment of the application, domain registered in Route53 an
 
 ## Development guidelines
 
-1. Before adding new logic, check in the code if a similar logic already exists
-2. When adding new logic, do it bottom up. For example when adding something to the template `resources/ec2/instance.yaml`, add the new logic there and then recursively add the required parameters to all templates will end up using it, until you map them in the `example.yaml` file.
-3. As a piece of advice, try not to hard code!
-4. Enjoy!
+1. The templates must be added in the sequence shown in the "Feature summary", as they express a level of dependency between the components.
+2. Improvements can be applied to templates mainly when defining different environments such as development, staging and production depending on how the architecture/infrastructure is established.
+3. :)
 
 
 
