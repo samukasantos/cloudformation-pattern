@@ -30,6 +30,8 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 - [Template Details](#template-details)
 - [Feature Summary](#feature-summary)
 - [Getting started](#getting-started)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
 
 ## Template Details
 
