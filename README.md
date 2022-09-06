@@ -28,6 +28,8 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 - [Why Cloudformation ?](#why-cloudformation-?)
 - [Table of Content](#table-of-content)
 - [Template Details](#template-details)
+- [Feature Summary](#feature-summary)
+- [Getting started](#getting-started)
 
 ## Template Details
 
@@ -44,6 +46,44 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 | /src/templates/cloudformation/rds/postgresql.yaml | rds | This template deploys a Postgres database to multiple AZs with the securit group associated. |
 | /src/templates/cloudformation/roles/github-action-role.yaml| GitHub role | This template deploys a role used by this repository to deploy in the AWS provider, the account used was created using AWS Organization with AWS SSO and this is the OIDC Github provider. |
 | /src/templates/cloudformation/roles/fargate-cluster-app-task-role.yaml| Farget task role | This template deploys an additional role for the Fargate to make possible the tasks communicate with AWS Apis. |
+
+## Feature Summary
+
+- VPC creation (vpc-base.yaml)
+- Private Subnet with NAT Gateway(vpc-az-private.yaml)
+- Public Subnet with Internet Gateway (vpc-az-public.yaml)
+- ECS Cluster (cluster.yaml)
+- ECR for store images (ecr.yaml)
+- ALB setup with granular settings (certificate and listeners) (alb.yaml)
+- ECS Service with service and task definitions (ecs.yaml)
+
+# Getting started
+
+## Requirements
+
+In order to use this framework, you will need:
+
+- The AWS CLI
+- AWS CLI access (Access Key and Secret Access Key)
+- Amazon EC2 key pair to access the EC2 instances
+- An AWS S3 bucket to upload the CloudFormation Templates to
+- Optional: AWS console management access (if you don't want to use the AWS CLI to create/manage required resources)
+
+**AWS CLI**
+
+Depending on the operating system / platform you are using, there are different ways to install the AWS CLI.
+* Windows: [Installing, updating, and uninstalling the AWS CLI version 2 on Windows](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html)
+* MacOS: Other than described in the official documentation by Amazon, we recommend to install the AWS CLI using [Homebrew](https://brew.sh/)
+    ```
+    $ brew install awscli
+    ```
+* Linux: [Installing, updating, and uninstalling the AWS CLI version 2 on Linux](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html)
+* Docker: [Using the official AWS CLI version 2 Docker image](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-docker.html)
+
+**AWS CLI access (Access and Secret Access Key)**
+
+The Access and the Secret Key are personalized and need to be generated. For further information, please consult the AWS documentation on [Understanding and getting your AWS credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).
+
 
 ## The stack output is presented by: 
 
