@@ -25,7 +25,7 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 
 
 # Table of Content
-- [Why Cloudformation](#why-cloudformation)
+- [Why Cloudformation](#why-cloudformation-?)
 - [Table of Content](#table-of-content)
 - [Template Details](#template-details)
 
