@@ -21,7 +21,13 @@ The repository features a set of templates that implement the following:
 
 ## Why Cloudformation ?
 
-Using CloudFormation to deploy and manage services on AWS brings more benefits than traditional methods like using the AWS CLI, scripting or even using the AWS console.
+Using CloudFormation to deploy and manage services on AWS brings more benefits than traditional methods like using the AWS CLI, scripting or even using the AWS console. These CloudFormation Templates are designed to simplify the creation of AWS resources and create complex environments with low effort.
+
+
+# Table of Content
+- [Why Cloudformation](#why-cloudformation)
+- [Table of Content](#table-of-content)
+- [Template Details](#template-details)
 
 ## Template Details
 
@@ -42,6 +48,8 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 ## The stack output is presented by: 
 
 <img width="1342" alt="Screen Shot 2022-09-01 at 5 29 34 am" src="https://user-images.githubusercontent.com/5481198/187766137-d866cd69-135a-4cb6-a82f-da88fd896df5.png">
+
+
 
 
 ## CI/CD Workflow
