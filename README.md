@@ -92,13 +92,6 @@ $ aws s3 mb s3://<your-project>-templates --profile <your-profile>
 
 ## Installation
 
-Due to CloudFormation lacking any mechanism for dependencies, we recommend to use this project as a git submodule.
-```
-$ git submodule add https://github.com/Netcentric/cloudformation-iac cloudformation-iac
-```
-
-For detailed information on how to work with Git submodules have a look at [this blog entry](https://subfictional.com/fun-with-git-submodules/)
-
 **AWS CLI Named Profiles**
 
 To ensure that changes are only applied to a selected account and region, we recommend using the AWS CLI with [named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
