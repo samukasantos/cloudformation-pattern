@@ -32,6 +32,7 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
 - [Getting started](#getting-started)
   - [Requirements](#requirements)
   - [Installation](#installation)
+- [Quickstart](#quickstart)
 
 ## Template Details
 
@@ -105,6 +106,38 @@ Finally test your setup, you should get a print out of all CloudFormation Stacks
 ```
 $ aws cloudformation --profile <your-profile> list-stacks
 ```
+
+# Quickstart
+
+1. **(OPTIONAL)** Add the repository as a submodule to your project
+    ```
+    $ git submodule add https://github.com/Netcentric/cloudformation-iac
+    ```
+
+2. Generate a key pair (the value of `KeyMaterial` will be your private key to access all EC2 instances)
+    ```
+    $ aws ec2 create-key-pair --profile <your-profile> --key-name <your-project>
+    ```
+
+3. Create a S3 bucket
+   ```
+   $ aws s3 mb s3://<your-project>-templates --profile <your-profile>
+   ```
+
+4. Create a copy of the example configuration `example.yaml` and change it as needed. When done, package and upload it
+    ```
+    $ aws cloudformation package --profile <your-profile> --template-file <your-template>.yaml --s3-bucket <your-project>-templates --output-template-file <your-template>.packaged.yaml
+    ```
+
+5. Finally create a stack, using the packaged template
+    ```
+    $ aws cloudformation deploy --profile <your-profile> --template-file <your-template>.packaged.yaml --stack-name <your-project>
+    ```
+
+    If your stack is creating IAM resources at any point (e.g. if you use OpsWorks Puppet Enterprise) you'll also need to specify the necessary capabilities
+    ```
+    $ aws cloudformation deploy --profile <your-profile> --template-file <your-template>.packaged.yaml --stack-name <your-project> --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
+    ```
 
 
 ## The stack output is presented by: 
