@@ -116,12 +116,12 @@ $ aws cloudformation --profile <your-profile> list-stacks
 
 2. Create a copy of the example configuration `vpc-base.yaml` and change it as needed. When done, package and upload it
     ```
-    $ aws cloudformation package --profile <your-profile> --template-file <your-template>.yaml --s3-bucket <your-project>-templates --output-template-file <your-template>.packaged.yaml
+    $ aws cloudformation package --profile <your-profile> --template-file <your-template>.yaml --s3-bucket <your-project>-templates --output-template-file <your-template>.yaml
     ```
 
 3. Finally create a stack, using the packaged template
     ```
-    $ aws cloudformation deploy --profile <your-profile> --template-file <your-template>.packaged.yaml --stack-name <your-project>
+    $ aws cloudformation deploy --profile <your-profile> --template-file <your-template>.yaml --stack-name <your-project>
     ```
 
   
