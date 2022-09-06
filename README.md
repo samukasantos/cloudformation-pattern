@@ -33,6 +33,7 @@ Using CloudFormation to deploy and manage services on AWS brings more benefits t
   - [Requirements](#requirements)
   - [Installation](#installation)
 - [Quickstart](#quickstart)
+- [CI/CD Workflow](#ci/cd-workflow)
 - [About](#about)
 
 ## Template Details
@@ -129,18 +130,6 @@ $ aws cloudformation --profile <your-profile> list-stacks
 
 <img width="1342" alt="Screen Shot 2022-09-01 at 5 29 34 am" src="https://user-images.githubusercontent.com/5481198/187766137-d866cd69-135a-4cb6-a82f-da88fd896df5.png">
 
-
-# About
-
-## Development guidelines
-
-1. Before adding new logic, check in the code if a similar logic already exists
-2. When adding new logic, do it bottom up. For example when adding something to the template `resources/ec2/instance.yaml`, add the new logic there and then recursively add the required parameters to all templates will end up using it, until you map them in the `example.yaml` file.
-3. As a piece of advice, try not to hard code!
-4. Enjoy!
-
-
-
 ## CI/CD Workflow
 
 The build and deployment automation is done through GitHub Actions, in the following steps:
@@ -155,6 +144,15 @@ Used a domain for deployment of the application, domain registered in Route53 an
 
 <img width="1324" alt="Screen Shot 2022-09-01 at 5 31 36 am" src="https://user-images.githubusercontent.com/5481198/187766755-665e9cf4-50dd-456c-9425-7ceab015e221.png">
 
+
+# About
+
+## Development guidelines
+
+1. Before adding new logic, check in the code if a similar logic already exists
+2. When adding new logic, do it bottom up. For example when adding something to the template `resources/ec2/instance.yaml`, add the new logic there and then recursively add the required parameters to all templates will end up using it, until you map them in the `example.yaml` file.
+3. As a piece of advice, try not to hard code!
+4. Enjoy!
 
 
 
