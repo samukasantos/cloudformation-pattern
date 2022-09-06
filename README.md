@@ -114,7 +114,7 @@ $ aws cloudformation --profile <your-profile> list-stacks
    $ aws s3 mb s3://<your-project>-templates --profile <your-profile>
    ```
 
-2. Create a copy of the example configuration `example.yaml` and change it as needed. When done, package and upload it
+2. Create a copy of the example configuration `vpc-base.yaml` and change it as needed. When done, package and upload it
     ```
     $ aws cloudformation package --profile <your-profile> --template-file <your-template>.yaml --s3-bucket <your-project>-templates --output-template-file <your-template>.packaged.yaml
     ```
@@ -124,10 +124,7 @@ $ aws cloudformation --profile <your-profile> list-stacks
     $ aws cloudformation deploy --profile <your-profile> --template-file <your-template>.packaged.yaml --stack-name <your-project>
     ```
 
-    If your stack is creating IAM resources at any point (e.g. if you use OpsWorks Puppet Enterprise) you'll also need to specify the necessary capabilities
-    ```
-    $ aws cloudformation deploy --profile <your-profile> --template-file <your-template>.packaged.yaml --stack-name <your-project> --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
-    ```
+  
 
 
 ## The stack output is presented by: 
