@@ -65,7 +65,6 @@ In order to use this framework, you will need:
 
 - The AWS CLI
 - AWS CLI access (Access Key and Secret Access Key)
-- Amazon EC2 key pair to access the EC2 instances
 - An AWS S3 bucket to upload the CloudFormation Templates to
 - Optional: AWS console management access (if you don't want to use the AWS CLI to create/manage required resources)
 
@@ -83,6 +82,34 @@ Depending on the operating system / platform you are using, there are different 
 **AWS CLI access (Access and Secret Access Key)**
 
 The Access and the Secret Key are personalized and need to be generated. For further information, please consult the AWS documentation on [Understanding and getting your AWS credentials](https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).
+
+**Amazon S3 bucket**
+
+CloudFormation requires the templates to be stored in an Amazon S3 bucket. A bucket can be easily created using the AWS CLI.
+```
+$ aws s3 mb s3://<your-project>-templates --profile <your-profile>
+```
+
+## Installation
+
+Due to CloudFormation lacking any mechanism for dependencies, we recommend to use this project as a git submodule.
+```
+$ git submodule add https://github.com/Netcentric/cloudformation-iac cloudformation-iac
+```
+
+For detailed information on how to work with Git submodules have a look at [this blog entry](https://subfictional.com/fun-with-git-submodules/)
+
+**AWS CLI Named Profiles**
+
+To ensure that changes are only applied to a selected account and region, we recommend using the AWS CLI with [named profiles](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html)
+```
+$ aws configure --profile <your-profile>
+```
+
+Finally test your setup, you should get a print out of all CloudFormation Stacks in the region you chose
+```
+$ aws cloudformation --profile <your-profile> list-stacks
+```
 
 
 ## The stack output is presented by: 
