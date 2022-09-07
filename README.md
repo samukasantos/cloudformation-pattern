@@ -79,7 +79,7 @@ In order to use this framework, you will need:
 
 Depending on the operating system / platform you are using, there are different ways to install the AWS CLI.
 * Windows: [Installing, updating, and uninstalling the AWS CLI version 2 on Windows](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-windows.html)
-* MacOS: Other than described in the official documentation by Amazon, we recommend to install the AWS CLI using [Homebrew](https://brew.sh/)
+* MacOS: Other than described in the official documentation by Amazon, is recommend to install the AWS CLI using [Homebrew](https://brew.sh/)
     ```
     $ brew install awscli
     ```
@@ -135,14 +135,14 @@ $ aws cloudformation --profile <your-profile> list-stacks
 ## CI-CD Workflow
 
 The build and deployment automation is done through GitHub Actions, in the following steps:
-  - Login to AWS using STS Credentials.
+- Use the aws-actions/configure-aws-credentials@v1 action to configure the AWS credentials, in the current configuration role-to-assume was used, but it is possible to use credentials such as aws-access-key-id, aws-secret- access-key, also remembering to infer the region.
 - Build and add the resulting image in ECR (Elastic Container Registry)
-- Deploys the ECS Fargate cluster with the changes inferred in the current commit, the template is stored in an S3 bucket to which only the repository has access through a trust relationship.
-- It is important to remember that an S3 bucket contains a file that represents the environment variables that are consequently embedded in the container during deployment.
+- In the current configuration, the ECS service template is used for the deployment process, every change in the source code is stored in an S3 bucket where only the role available for this service can access.
+- One of the parameters inferred to the ECS Service is a path referring to a bucket with an .env file, which contains the environment variables that can be injected into the container, so that the application can read the .env file, it is necessary to modify the code to make this happen. Remembering that the file is injected into the bucket through a trusted relationship, it is important to validate the container's execution role and task role.
 
 ## Application
 
-Used a domain for deployment of the application, domain registered in Route53 and routing to the Load Balancer of the present solution.
+After validating the application's healthcheck on the application's target groups and verifying the status 200, a record on route 53 can be created (get a domain for that) and pointed to the LoadBalancer, as the templates are covering the creation of certificates the application should respond to the https:443 protocol.
 
 <img width="1324" alt="Screen Shot 2022-09-01 at 5 31 36 am" src="https://user-images.githubusercontent.com/5481198/187766755-665e9cf4-50dd-456c-9425-7ceab015e221.png">
 
