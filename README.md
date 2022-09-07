@@ -139,6 +139,7 @@ The build and deployment automation is done through GitHub Actions, in the follo
 - Build and add the resulting image in ECR (Elastic Container Registry)
 - In the current configuration, the ECS service template is used for the deployment process, every change in the source code is stored in an S3 bucket where only the role available for this service can access.
 - One of the parameters inferred to the ECS Service is a path referring to a bucket with an .env file, which contains the environment variables that can be injected into the container, so that the application can read the .env file, it is necessary to modify the code to make this happen. Remembering that the file is injected into the bucket through a trusted relationship, it is important to validate the container's execution role and task role.
+- Change the values according to your preferences.
 
 ## Application
 
