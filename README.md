@@ -150,8 +150,6 @@ After validating the application's healthcheck on the application's target group
 
 # About
 
-## Development guidelines
-
 1. The templates must be added in the sequence shown in the "Feature summary", as they express a level of dependency between the components.
 2. Improvements can be applied to templates mainly when defining different environments such as development, staging and production depending on how the architecture/infrastructure is established.
 3. :)
