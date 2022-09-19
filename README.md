@@ -1,4 +1,4 @@
-# Servian DevOps - Deploying Microservices with Amazon Fargate, AWS CloudFormation and an Application Load Balancer.
+# Deploying Microservices with Amazon Fargate, AWS CloudFormation and an Application Load Balancer.
 
 
 This reference architecture provides a set of YAML templates for deploying microservices using cloudformation.
