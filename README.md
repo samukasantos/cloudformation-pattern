@@ -145,9 +145,6 @@ The build and deployment automation is done through GitHub Actions, in the follo
 
 After validating the application's healthcheck on the application's target groups and verifying the status 200, a record on route 53 can be created (get a domain for that) and pointed to the LoadBalancer, as the templates are covering the creation of certificates the application should respond to the https:443 protocol.
 
-<img width="1324" alt="Screen Shot 2022-09-01 at 5 31 36 am" src="https://user-images.githubusercontent.com/5481198/187766755-665e9cf4-50dd-456c-9425-7ceab015e221.png">
-
-
 # About
 
 1. The templates must be added in the sequence shown in the "Feature summary", as they express a level of dependency between the components.
